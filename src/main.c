@@ -32,3 +32,10 @@ int main(int argc, char **argv)
     freeall(&data);
     return (0); // exit 미제공
 }
+
+// https://bingu.tistory.com/7
+// https://raidho.tistory.com/141?category=940489
+// https://reakwon.tistory.com/98
+// https://bigpel66.oopy.io/library/42/inner-circle/9
+// https://techdebt.tistory.com/32
+// https://www.youtube.com/watch?v=YAP0Bv_aQl8

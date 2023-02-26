@@ -19,7 +19,6 @@ typedef struct s_philo
     pthread_mutex_t *right_fork;
     pthread_mutex_t left_fork;
     pthread_mutex_t eating;
-    struct s_data   *data;
 }   t_philo;
 
 typedef struct s_data
@@ -32,7 +31,7 @@ typedef struct s_data
     int             n_eat; // number of eat
     int             finish; // 0: false 1: true
     long int        t_start; // time_to_start
-    t_philo         **philo; // shared info
+    t_philo         *philo; // shared info
     pthread_mutex_t message;
     pthread_mutex_t m_stop; //?
     pthread_mutex_t m_eat; // ?

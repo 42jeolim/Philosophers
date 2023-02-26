@@ -5,7 +5,7 @@ void    philo_eat(t_philo *philo)
     print(philo, " is eating\n");
     pthread_mutex_lock(&(philo->data->m_eat));
     philo->last_eat = timestamp();
-    philo->m_count++;
+    philo->count++;
     pthread_mutex_unlock(&(philo->data->m_eat));
     ft_usleep(philo->data->time_to_eat);
     pthread_mutex_unlock((philo->right_fork));
@@ -62,7 +62,7 @@ void    *philo_life(void *philo)
         take_fork(p);
         philo_eat(p);
         pthread_detach(t);
-        if (p->m_count == p->data->n_eat)
+        if (p->count == p->data->n_eat)
         {
             pthread_mutex_lock(&p->data->m_stop);
             if (++p->data->philo_eat == p->data->n_philo)

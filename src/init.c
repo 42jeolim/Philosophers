@@ -13,7 +13,7 @@ int philo_init(t_data *data)
         data->philo[i].last_eat = 0; // last eat init
         data->philo[i].right_fork = NULL; // right_fork = null
         data->philo[i].data = data; // data 넘기기
-        data->philo[i].m_count = 0; // m_count init
+        data->philo[i].count = 0; // m_count init
 
         pthread_mutex_init(&(data->philo[i].left_fork), NULL); // left_fork mutex init
         if (i == data->n_philo - 1)
