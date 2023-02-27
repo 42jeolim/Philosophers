@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jeolim <jeolim@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/27 11:02:23 by jeolim            #+#    #+#             */
+/*   Updated: 2023/02/27 14:16:29 by jeolim           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 int    error_print(char *str)
@@ -19,7 +31,7 @@ void    print(t_philo *philo, char *str)
     time = timestamp() - philo->data->t_start;
     if (!philo->data->finish && time >= 0 \
         && time <= 2147483647 && !is_dead(philo, 0))
-        printf("%lld %d %s", timestamp() - philo->data->t_start, philo->id, str);
+        printf("[%lld]\tms | %d %s\n", timestamp() - philo->data->t_start, philo->id, str);
     pthread_mutex_unlock(&(philo->data->message));
 }
 
