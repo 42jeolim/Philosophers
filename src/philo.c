@@ -12,46 +12,48 @@
 
 #include "philo.h"
 
-void    philo_eat(t_philo *philo)
-{
-    print(philo, " is eating\n");
-    pthread_mutex_lock(&(philo->data->m_eat));
-    philo->last_eat = timestamp();
-    philo->count++;
-    pthread_mutex_unlock(&(philo->data->m_eat));
-    ft_usleep(philo->data->time_to_eat);
-    pthread_mutex_unlock((philo->right_fork));
-    pthread_mutex_unlock(&(philo->left_fork));
-    print(philo, " is sleeping\n");
-    ft_usleep(philo->data->time_to_sleep);
-    print(philo, " is thinking\n");
-}
-
 void    take_fork(t_philo *philo)
 {
     pthread_mutex_lock(&philo->data->fork[philo->left_fork]);
-    print(philo, " has taken the left fork 🍴\n");
+    pirnt_message(philo, "has taken the left fork 🍴");
     pthread_mutex_lock(&philo->data->fork[philo->right_fork]);
-    printf(philo, "has taken the right fork 🍴🍴\n");
-    pthread_mutex_lock(&philo->must_eat);
+    pirnt_message(philo, "has taken the right fork 🍴🍴");
+    pthread_mutex_lock(&philo->mutex_eating);
     philo->last_eat = timestamp();
     philo->is_eating = 1;
-    print(philo->data, "is eating 🍝\n");
+    pirnt_message(philo, "is eating 🍝");
     ft_usleep(philo->data->time_to_eat);
     philo->is_eating = 0;
     philo->count++;
-    pthread-pthread_mutex_unlock(&philo->must_eat);
+    pthread_mutex_unlock(&philo->mutex_eating);
 }
 
-void    check_eat(t_philo *philo)
+void    *routine(void   *philo)
+{
+    t_philo *tmp;
+
+    tmp = (t_philo *)philo;
+    while(tmp->data->finish)
+    {
+        take_fork(tmp);
+        pthread_mutex_unlock(&tmp->data->fork[tmp->left_fork]);
+        pthread_mutex_unlock(&tmp->data->fork[tmp->right_fork]);
+        pirnt_message(tmp, "is sleeping 💤");
+        ft_usleep(tmp->data->time_to_sleep);
+        pirnt_message(tmp, "is thinking 🤔");
+    }
+    return (NULL);
+}
+
+void    check_eat(t_philo   *philo)
 {
     int i;
 
     i = 0;
-    pthread_mutex_lock(&philo->eating);
-    while (i < philo->data->n_philo)
+    pthread_mutex_lock(&philo->mutex_eating);
+    while(i < philo->data->n_philo)
     {
-        if (philo->data->philo[i]->count >= philo->data->philo_eat)
+        if (philo->data->philo[i]->count >= philo->data->must_eat)
         {
             if (i == philo->data->n_philo - 1)
             {
@@ -63,44 +65,47 @@ void    check_eat(t_philo *philo)
         else
             break;
     }
-    pthread_mutex_unlock(&philo->eating);
+    pthread_mutex_unlock(&philo->mutex_eating);
 }
 
-void    *check_death(void *philo)
+void    *check_death(void   *philo)
 {
-    t_philo *p;
+    t_philo *tmp;
 
-    p = (t_philo *)philo;
-    while (p->data->finish)
+    tmp = (t_philo *)philo;
+    while (tmp->data->finish)
     {
-        if (!(p->data->eating) && timestamp() - p->last_eat >= p->data->time_to_die)
+        if (!(tmp->is_eating) && timestamp() - tmp->last_eat >= tmp->data->time_to_die)
         {
-            pthread_mutex_lock(&p->must_eat);
-            print(p, "died ☠️\n");
-            p->data->finish = 0;
-            pthread_mutex_unlock(&p->eating);
+            pthread_mutex_lock(&tmp->mutex_eating);
+            pirnt_message(tmp, "died ☠️");
+            tmp->data->finish = 0;
+            pthread_mutex_unlock(&tmp->mutex_eating);
         }
-        if (p->data->philo_eat && p->count >= p->data->philo_eat)
-            check_eat(p);
+        if (tmp->data->must_eat && tmp->count >= tmp->data->must_eat)
+            check_eat(tmp);
         ft_usleep(100);
     }
     return (NULL);
 }
 
-void    *routine(void   *philo)
+void    philo_work(t_data *data)
 {
-    t_philo *p;
+    int i;
 
-    p = (t_philo *)philo;
-    while(p->data->finish)
+    i = 0;
+    while (i < data->n_philo)
     {
-        take_fork(p);
-
-        pthread_mutex_unlock(&p->data->fork[p->left_fork]);
-        pthread_mutex_unlock(&p->data->fork[p->right_fork]);
-        prnt(p, "is sleeping 💤\n");
-        ft_usleep(p->data->time_to_sleep);
-        print(p, "is thinking 🤔\n");
+        data->philo[i]->last_eat = timestamp();
+        pthread_create(&data->philo[i]->thread, NULL, routine, (void *)data->philo[i]);
+        i++;
+        usleep(100);
     }
-    return (NULL);
+    i = 0;
+    while (i < data->n_philo)
+    {
+        pthread_create(&data->philo[i]->check_death_thread, NULL, check_death, (void *)data->philo[i]);
+        i++;
+        usleep(100);
+    }
 }

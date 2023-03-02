@@ -12,32 +12,50 @@
 
 #include "philo.h"
 
-int check_num(char *str)
+int error_print(char *str)
 {
     int i;
 
     i = 0;
     while (str[i])
-    {
-        if (str[i] < '0' || str[i] > '9')
-            return(1);
         i++;
-    }
-    return (0);
+    write(2, str, i);
+    return (1);
+}
+
+void    pirnt_message(t_philo *philo, char *str)
+{
+    // int    time;
+
+    pthread_mutex_lock(&(philo->data->message));
+    // time = timestamp() - philo->data->t_start;
+    // if (!philo->data->finish && time >= 0 && time <= 2147483647 && !is_dead(philo, 0))
+    // printf("tmestamp : %d\n", timestamp());
+    // printf("starttime : %d\n", philo->data->t_start);
+    // printf("ms : %d\n", timestamp() - philo->data->t_start);
+    printf("[%d]ms\t| %d %s\n", timestamp() - philo->data->t_start, philo->id + 1, str);
+    pthread_mutex_unlock(&(philo->data->message));
+}
+
+int timestamp(void)
+{
+    struct timeval  tv;
+
+    gettimeofday(&tv, NULL);
+    return (tv.tv_sec * (uint64_t)1000 + tv.tv_usec / 1000);
 }
 
 int ft_atoi(const char *str)
 {
-    unsigned long   res;
-    int             sign;
+    unsigned long long  res;
+    int                 sign;
 
     sign = 1;
     res = 0;
     while ((*str >= 9 && *str <= 13) || (*str == ' '))
         str++;
     if (*str == '-' || *str == '+')
-    {
-        if (*str == '-')
+    {   if (*str == '-')
             sign *= -1;
         str++;
     }
@@ -50,22 +68,20 @@ int ft_atoi(const char *str)
         return (0);
     if (res > 2147483647 && sign == 1)
         return (-1);
-    return ((int)(res * sign));
+    return ((int)res * sign);
 }
 
-void    freeall(t_data *data)
+void    ft_usleep(int ms)
 {
-    // int i;
+    long int    time;
 
-    // i = -1;
-    // while (++i < data->n_philo)
-    // {
-    //     pthread_mutex_destroy(&data->philo[i].left_fork);
-    //     pthread_mutex_destroy(data->philo[i].right_fork);
-    // }
-    free(data->philo);
-    pthread_mutex_destroy(&data->message);
-    // pthread_mutex_destroy(&data->m_stop);
-    // pthread_mutex_destroy(&data->m_eat);
-    // pthread_mutex_destroy(&data->dead);
+    time = timestamp();
+    while (timestamp() - time < ms)
+        usleep(ms / 10);
 }
+
+// void    freeall(t_data *data)
+// {
+//     free(data->philo);
+//     pthread_mutex_destroy(&data->message);
+// }

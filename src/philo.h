@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
- #ifndef PHILO_H
-# define PHILO_H
+#ifndef PHILO_H
+#define PHILO_H
 
 #include <unistd.h>
 #include <sys/time.h>
@@ -24,13 +24,13 @@ typedef struct s_philo
     int             id;
     int             is_eating;
     int             count;
-    long int        last_eat;
+    int             last_eat;
     int             right_fork;
     int             left_fork;
     pthread_t       thread;
     pthread_t       check_death_thread;
     struct  s_data  *data;
-    pthread_mutex_t eating;
+    pthread_mutex_t mutex_eating;
 }   t_philo;
 
 typedef struct s_data
@@ -39,37 +39,29 @@ typedef struct s_data
     int             time_to_die;
     int             time_to_eat;
     int             time_to_sleep;
-    int             philo_eat;
-    long int        t_start;
+    int             must_eat;
+    int             t_start;
     pthread_mutex_t message;
     pthread_mutex_t *fork;
     int             finish;
     t_philo         **philo;
 }   t_data;
 
-// init.c
-int         var_init(t_data *data, int argc, char **argv);
-int         philo_init(t_data *data);
-int         check(int argc, char **argv);
-void        philo_work(t_data *data);
+// main
 
 // philo.c
-void        philo_eat(t_philo *philo);
-void        take_fork(t_philo *philo);
-void        check_eat(t_philo *philo);
-void        *check_death(void *philo);
-void        *routine(void   *philo);
+void    philo_work(t_data *data);
 
-// utils.c
-long long   timestamp(void);
-void        ft_usleep(int ms); // check
-int         is_dead(t_philo *philo, int n); //check
-void        print(t_philo *philo, char *str);
-int         error_print(char *str);
-
-// additional
+// util.c
+int         check(int argc, char **argv);
 int         check_num(char *str);
+int         var_init(t_data *data, int argc, char **argv);
+
+// additional.c
+int         error_print(char *str);
+void        pirnt_message(t_philo *philo, char *str);
+int         timestamp(void);
 int         ft_atoi(const char *str);
-void        freeall(t_data *data);
+void        ft_usleep(int ms);
 
 #endif

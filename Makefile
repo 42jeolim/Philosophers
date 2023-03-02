@@ -11,7 +11,6 @@
 # **************************************************************************** #
 
 SRCS		=	./src/main.c \
-				./src/init.c \
 				./src/utils.c \
 				./src/philo.c \
 				./src/additional.c

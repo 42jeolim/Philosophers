@@ -14,19 +14,25 @@
 
 int main(int argc, char **argv)
 {
-    t_data data;
+    t_data  data;
 
     if (check(argc, argv))
         return (1);
-    if (var_init(&data, argc, argv) == 1)
-    {
-        free(data.philo);
-        return(error_print("Init Failed\n"));
-    }
-    philo_init(&data);
+    
+    if (var_init(&data, argc, argv) == -1)
+        return(error_print("Allocate Failed\n"));
+    
+    data.finish = 1;
+    data.t_start = timestamp();
     philo_work(&data);
+    
+    // printf("%d %d %d %d\n", data.n_philo, data.time_to_die, data.time_to_eat, data.time_to_sleep);
+    // for (int i = 0; i < data.n_philo; i++)
+    // {
+    //     printf("%d : %d, %d\n", data.philo[i]->id, data.philo[i]->left_fork, data.philo[i]->right_fork);
+    // }
     while (data.finish)
         continue ;
-    freeall(&data);
-    return (0); // exit 미제공
+    // system("leaks a.out");
+    return (0);
 }

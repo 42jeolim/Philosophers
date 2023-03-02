@@ -12,56 +12,109 @@
 
 #include "philo.h"
 
-int    error_print(char *str)
+int check(int argc, char **argv)
 {
-    int len;
+    int i;
 
-    len = 0;
-    while (str[len])
-        len++;
-    write(2, str, len);
-    return (1);
-}
-
-void    print(t_philo *philo, char *str)
-{
-    long int    time;
-
-    pthread_mutex_lock(&(philo->data->message));
-    time = timestamp() - philo->data->t_start;
-    if (!philo->data->finish && time >= 0 \
-        && time <= 2147483647 && !is_dead(philo, 0))
-        printf("[%lld]\tms | %d %s\n", timestamp() - philo->data->t_start, philo->id, str);
-    pthread_mutex_unlock(&(philo->data->message));
-}
-
-int is_dead(t_philo *philo, int n)
-{
-    pthread_mutex_lock(&philo->data->dead);
-    if (n)
-        philo->data->finish = 1;
-    if (philo->data->finish)
+    if (argc != 5 && argc != 6)
+        return(error_print("Parameter Error\n"));
+    i = 1;
+    while (i < argc)
     {
-        pthread_mutex_unlock(&philo->data->dead);
-        return (1);
+        if (check_num(argv[i]) || ft_atoi(argv[i]) <= 0)
+            return(error_print("Invalid Arguments\n"));
+        i++;
     }
-    pthread_mutex_unlock(&philo->data->dead);
     return (0);
 }
 
-void    ft_usleep(int ms)
+int check_num(char *str)
 {
-    long int    time;
+    int i;
 
-    time = timestamp();
-    while (timestamp() - time < ms)
-        usleep(ms / 10);
+    i = 0;
+    while (str[i])
+    {
+        if (str[i] < '0' || str[i] > '9')
+            return (1);
+        i++;
+    }
+    return (0);
 }
 
-long long   timestamp(void)
+t_philo **philo_init(t_data *data)
 {
-    struct timeval   tv;
+    t_philo **tmp;
+    int     i;
 
-    gettimeofday(&tv, NULL);
-    return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
+    tmp = (t_philo **)malloc(sizeof(t_philo *) * data->n_philo);
+    if (!tmp)
+        return (NULL);
+    i = 0;
+    while (i < data->n_philo)
+    {
+        tmp[i] = (t_philo *)malloc(sizeof(t_philo) * 1);
+        if (!tmp[i])
+            return(NULL);
+        if (pthread_mutex_init(&tmp[i]->mutex_eating, NULL))
+        {
+            free(tmp);
+            return (NULL);
+        }
+        tmp[i]->id = i;
+        tmp[i]->data = data;
+        tmp[i]->is_eating = 0;
+        tmp[i]->count = 0;
+        tmp[i]->left_fork = i;
+        tmp[i]->right_fork = (i + 1) % data->n_philo;
+        i++;
+    }
+    return (tmp);
+}
+
+pthread_mutex_t *fork_init(t_data *data)
+{
+    pthread_mutex_t *tmp;
+    int             i;
+
+    i = 0;
+    if (data->n_philo < 0 || data->time_to_die < 0 \
+        || data->time_to_eat < 0 || data->time_to_sleep < 0 \
+        || data->must_eat < 0)
+        return (NULL);
+    tmp = malloc(sizeof(pthread_mutex_t) * data->n_philo);
+    if (!tmp)
+        return (NULL);
+    while (i < data->n_philo)
+    {
+        pthread_mutex_init(&tmp[i], NULL);
+        i++;
+    }
+    return (tmp);
+}
+
+int var_init(t_data *data, int argc, char **argv)
+{
+    // int i;
+
+    // i = 0;
+    pthread_mutex_init(&data->message, NULL);
+    data->n_philo = ft_atoi(argv[1]);
+    data->time_to_die = ft_atoi(argv[2]);
+    data->time_to_eat = ft_atoi(argv[3]);
+    data->time_to_sleep = ft_atoi(argv[4]);
+    // data->finish = 1;
+    data->must_eat = 0;
+    data->t_start = timestamp();
+    if (argc == 6)
+        data->must_eat = ft_atoi(argv[5]);
+    data->fork = fork_init(data);
+    if (!data->fork)
+        // printf("check1");
+        return(-1);
+    data->philo = philo_init(data);
+    if (!data->philo)
+        // printf("check2");
+        return (-1);
+    return(0);
 }
