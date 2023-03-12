@@ -39,19 +39,10 @@ int	ft_atoi(const char *str)
 	return ((int)res * sign);
 }
 
-int	check(int argc, char **argv)
+int	check(t_data *data)
 {
-	int	i;
-
-	if (argc != 5 && argc != 6)
-		return (error_print("Invalid Parameter\n"));
-	i = 1;
-	while (i < argc)
-	{
-		if (check_num(argv[i]) || ft_atoi(argv[i]) <= 0)
-			return (error_print("Parameter Error\n"));
-		i++;
-	}
+	if (data->n_philo < 0 || data->n_philo > 200 || data->time_to_die < 0 || data->time_to_eat < 0 || data->time_to_sleep < 0)
+		return (-1);
 	return (0);
 }
 

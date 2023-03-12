@@ -34,21 +34,21 @@ void	pirnt_message(t_philo *philo, char *str)
 
 long long	timestamp(void)
 {
-	struct timeval	tv;
+	struct timeval	time;
 
-	gettimeofday(&tv, NULL);
-	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
+	gettimeofday(&time, NULL);
+	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
-void	sleeping_time(t_philo *philo)
+void	sleeping_time(t_data *data)
 {
 	long long	sleep_time;
 	long long	start_time;
 	long long	now_time;
 
-	sleep_time = (long long)(philo->data->time_to_die);
+	sleep_time = (long long)(data->time_to_sleep);
 	start_time = timestamp();
-	while (!(philo->data->finish))
+	while (!(data->finish))
 	{
 		now_time = timestamp();
 		if ((now_time - start_time) >= sleep_time)
@@ -57,15 +57,15 @@ void	sleeping_time(t_philo *philo)
 	}
 }
 
-void	eating_time(t_philo *philo)
+void	eating_time(t_data *data)
 {
 	long long	eat_time;
 	long long	start_time;
 	long long	now_time;
 
-	eat_time = (long long)(philo->data->time_to_eat);
+	eat_time = (long long)(data->time_to_eat);
 	start_time = timestamp();
-	while (!(philo->data->finish))
+	while (!(data->finish))
 	{
 		now_time = timestamp();
 		if ((now_time - start_time) >= eat_time)

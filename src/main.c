@@ -12,15 +12,21 @@
 
 #include "philo.h" 
 
+void checking(void)
+{
+	system("leaks philo");
+}
+
 int	main(int argc, char **argv)
 {
 	t_data	data;
 
-	if (check(argc, argv))
-		return (1);
+	if (argc != 5 && argc != 6)
+		return (error_print("Invalid Parameter\n"));
 	if (var_init(&data, argc, argv))
 		return (error_print("Error\n"));
-	if (philo_work(&data))
+	if (philo_work(&data, (&data)->philo))
 		return (error_print("Working Error\n"));
+	atexit(checking);
 	return (0);
 }
