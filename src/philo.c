@@ -6,7 +6,7 @@
 /*   By: jeolim <jeolim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 11:02:20 by jeolim            #+#    #+#             */
-/*   Updated: 2023/03/12 15:41:51 by jeolim           ###   ########.fr       */
+/*   Updated: 2023/03/12 19:49:06 by jeolim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	check_eat(t_philo *philo)
 	i = 0;
 	while (philo->data->must_eat != 0 && i < philo->data->n_philo \
 			&& philo[i].count > philo->data->must_eat)
-	i++;
+		i++;
 	if (i == philo->data->n_philo)
 		philo->data->is_eating = 1;
 }
