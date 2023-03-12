@@ -19,11 +19,8 @@ int	main(int argc, char **argv)
 	if (check(argc, argv))
 		return (1);
 	if (var_init(&data, argc, argv) == -1)
-		return (error_print("Allocate Failed\n"));
-	data.finish = 1;
-	data.t_start = timestamp();
-	philo_work(&data);
-	while (data.finish)
-		continue ;
+		return (error_print("Error\n"));
+	if (philo_work(&data) == -1)
+		return (error_print("Working Error\n"));
 	return (0);
 }

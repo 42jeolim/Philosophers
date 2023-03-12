@@ -7,6 +7,12 @@
     "vector": "c",
     "ios": "c",
     "__locale": "c",
-    "__threading_support": "c"
+    "__threading_support": "c",
+    "tuple": "c",
+    "type_traits": "c",
+    "algorithm": "c",
+    "chrono": "c",
+    "unordered_map": "c",
+    "ostream": "c"
   }
 }

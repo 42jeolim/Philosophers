@@ -22,15 +22,12 @@
 typedef struct s_philo
 {
 	int				id;
-	int				is_eating;
 	int				count;
-	int				last_eat;
+	long long		last_eat;
 	int				right_fork;
 	int				left_fork;
 	pthread_t		thread;
-	pthread_t		check_death_thread;
 	struct s_data	*data;
-	pthread_mutex_t	mutex_eating;
 }	t_philo;
 
 typedef struct s_data
@@ -40,26 +37,29 @@ typedef struct s_data
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				must_eat;
-	int				t_start;
+	long long		t_start;
+	int				finish;
+	int				is_eating;
 	pthread_mutex_t	message;
 	pthread_mutex_t	*fork;
-	int				finish;
-	t_philo			**philo;
+	pthread_mutex_t	mutex_eating;
+	t_philo			*philo;
 }	t_data;
 
 // philo.c
-void	philo_work(t_data *data);
+int			philo_work(t_data *data);
 
 // util.c
-int		check(int argc, char **argv);
-int		check_num(char *str);
-int		var_init(t_data *data, int argc, char **argv);
+int			check(int argc, char **argv);
+int			check_num(char *str);
+int			var_init(t_data *data, int argc, char **argv);
 
 // additional.c
-int		error_print(char *str);
-void	pirnt_message(t_philo *philo, char *str);
-int		timestamp(void);
-int		ft_atoi(const char *str);
-void	ft_usleep(int ms);
+int			error_print(char *str);
+void		pirnt_message(t_philo *philo, char *str);
+long long	timestamp(void);
+int			ft_atoi(const char *str);
+void		sleeping_time(t_philo *philo);
+void		eating_time(t_philo *philo);
 
 #endif
