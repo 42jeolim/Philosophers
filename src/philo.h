@@ -6,7 +6,7 @@
 /*   By: jeolim <jeolim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 11:02:25 by jeolim            #+#    #+#             */
-/*   Updated: 2023/03/05 16:22:16 by jeolim           ###   ########.fr       */
+/*   Updated: 2023/03/12 15:42:04 by jeolim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,19 +46,22 @@ typedef struct s_data
 	t_philo			*philo;
 }	t_data;
 
-// philo.c
-int			philo_work(t_data *data);
-
-// util.c
+// check.c
 int			check(int argc, char **argv);
 int			check_num(char *str);
+int			ft_atoi(const char *str);
+
+// init.c
 int			var_init(t_data *data, int argc, char **argv);
+void		end_philo(t_philo *philo);
+
+// philo.c
+int			philo_work(t_data *data);
 
 // additional.c
 int			error_print(char *str);
 void		pirnt_message(t_philo *philo, char *str);
 long long	timestamp(void);
-int			ft_atoi(const char *str);
 void		sleeping_time(t_philo *philo);
 void		eating_time(t_philo *philo);
 

@@ -1,48 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeolim <jeolim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 11:02:23 by jeolim            #+#    #+#             */
-/*   Updated: 2023/03/05 16:41:53 by jeolim           ###   ########.fr       */
+/*   Updated: 2023/03/12 15:43:09 by jeolim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	check(int argc, char **argv)
-{
-	int	i;
-
-	if (argc != 5 && argc != 6)
-		return (error_print("Invalid Parameter\n"));
-	i = 1;
-	while (i < argc)
-	{
-		if (check_num(argv[i]) || ft_atoi(argv[i]) <= 0)
-			return (error_print("Parameter Error\n"));
-		i++;
-	}
-	return (0);
-}
-
-int	check_num(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] < '0' || str[i] > '9')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-int philo_init(t_data *data)
+int	philo_init(t_data *data)
 {
 	int		i;
 
@@ -57,12 +27,13 @@ int philo_init(t_data *data)
 		data->philo[i].count = 0;
 		data->philo[i].left_fork = i;
 		data->philo[i].right_fork = (i + 1) % data->n_philo;
+		data->philo[i].last_eat = 0;
 		i++;
 	}
 	return (0);
 }
 
-int fork_init(t_data *data)
+int	fork_init(t_data *data)
 {
 	int				i;
 
@@ -87,6 +58,8 @@ int	var_init(t_data *data, int argc, char **argv)
 {
 	if (pthread_mutex_init(&data->message, NULL))
 		return (-1);
+	if (pthread_mutex_init(&data->mutex_eating, NULL))
+		return (-1);
 	data->n_philo = ft_atoi(argv[1]);
 	data->time_to_die = ft_atoi(argv[2]);
 	data->time_to_eat = ft_atoi(argv[3]);
@@ -102,4 +75,20 @@ int	var_init(t_data *data, int argc, char **argv)
 	if (philo_init(data))
 		return (-1);
 	return (0);
+}
+
+void	end_philo(t_philo *philo)
+{
+	int	i;
+
+	i = 0;
+	while (i < philo->data->n_philo)
+		pthread_join(philo[i++].thread, NULL);
+	i = 0;
+	while (i < philo->data->n_philo)
+		pthread_mutex_destroy(&(philo->data->fork[i++]));
+	free(philo->data->philo);
+	free(philo->data->fork);
+	pthread_mutex_destroy(&(philo->data->mutex_eating));
+	pthread_mutex_destroy(&(philo->data->message));
 }

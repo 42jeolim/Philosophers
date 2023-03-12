@@ -6,7 +6,7 @@
 /*   By: jeolim <jeolim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 12:54:50 by jeolim            #+#    #+#             */
-/*   Updated: 2023/03/05 16:27:04 by jeolim           ###   ########.fr       */
+/*   Updated: 2023/03/12 15:26:04 by jeolim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,33 +38,6 @@ long long	timestamp(void)
 
 	gettimeofday(&tv, NULL);
 	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
-}
-
-int	ft_atoi(const char *str)
-{
-	unsigned long long	res;
-	int					sign;
-
-	sign = 1;
-	res = 0;
-	while ((*str >= 9 && *str <= 13) || (*str == ' '))
-		str++;
-	if (*str == '-' || *str == '+')
-	{
-		if (*str == '-')
-			sign *= -1;
-		str++;
-	}
-	while (*str >= '0' && *str <= '9')
-	{
-		res = res * 10 + (*str - '0');
-		str++;
-	}
-	if (res > 2147483648 && sign == -1)
-		return (0);
-	if (res > 2147483647 && sign == 1)
-		return (-1);
-	return ((int)res * sign);
 }
 
 void	sleeping_time(t_philo *philo)

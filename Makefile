@@ -6,14 +6,15 @@
 #    By: jeolim <jeolim@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/27 11:02:14 by jeolim            #+#    #+#              #
-#    Updated: 2023/02/27 12:55:31 by jeolim           ###   ########.fr        #
+#    Updated: 2023/03/12 16:30:39 by jeolim           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRCS		=	./src/main.c \
-				./src/utils.c \
+				./src/init.c \
 				./src/philo.c \
-				./src/additional.c
+				./src/additional.c \
+				./src/check.c
 
 OBJS		=	$(SRCS:.c=.o)
 
