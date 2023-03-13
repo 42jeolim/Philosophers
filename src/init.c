@@ -59,6 +59,9 @@ int	fork_init(t_data *data)
 	int				i;
 
 	i = 0;
+	if (data->n_philo < 0 || data->n_philo > 200 || data->time_to_die < 0 || \
+		data->time_to_eat < 0 || data->time_to_sleep < 0)
+		return (-1);
 	data->fork = malloc(sizeof(pthread_mutex_t) * data->n_philo);
 	if (!(data->fork))
 		return (-1);
@@ -81,8 +84,6 @@ int	var_init(t_data *data, int argc, char **argv)
 	data->must_eat = 0;
 	data->is_eating = 0;
 	data->t_start = 0;
-	if (check(data))
-		return (-1);
 	if (argc == 6)
 	{
 		data->must_eat = ft_atoi(argv[5]);
