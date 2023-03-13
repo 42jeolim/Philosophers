@@ -68,7 +68,7 @@ void	check_death(t_data *data, t_philo *philo)
 	while (!(data->is_eating))
 	{
 		i = 0;
-		while ((i < data->n_philo) && (!(philo->data->finish)))
+		while ((i < data->n_philo) && (!(data->finish)))
 		{
 			pthread_mutex_lock(&(data->mutex_eating));
 			if ((timestamp() - philo[i].last_eat) > philo->data->time_to_die)
