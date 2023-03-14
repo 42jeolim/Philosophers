@@ -6,7 +6,7 @@
 /*   By: jeolim <jeolim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 11:02:25 by jeolim            #+#    #+#             */
-/*   Updated: 2023/03/12 15:42:04 by jeolim           ###   ########.fr       */
+/*   Updated: 2023/03/14 13:12:45 by jeolim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int				philo_work(t_data *data, t_philo *philo);
 
 // additional.c
 int				error_print(char *str);
-void			pirnt_message(t_philo *philo, char *str);
+void			pirnt_message(t_data *philo, char *str, int id);
 long long		timestamp(void);
 void			sleeping_time(t_data *data);
 void			eating_time(t_data *data);

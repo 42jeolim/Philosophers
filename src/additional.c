@@ -6,7 +6,7 @@
 /*   By: jeolim <jeolim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 12:54:50 by jeolim            #+#    #+#             */
-/*   Updated: 2023/03/12 15:26:04 by jeolim           ###   ########.fr       */
+/*   Updated: 2023/03/14 13:12:04 by jeolim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ int	error_print(char *str)
 	return (1);
 }
 
-void	pirnt_message(t_philo *philo, char *str)
+void	pirnt_message(t_data *data, char *str, int id)
 {
-	pthread_mutex_lock(&(philo->data->message));
-	if (!philo->data->finish)
-		printf("[%lld]ms\t| %d %s\n", timestamp() - philo->data->t_start, \
-				philo->id + 1, str);
-	pthread_mutex_unlock(&(philo->data->message));
+	pthread_mutex_lock(&(data->message));
+	if (!data->finish)
+		printf("[%lld]ms\t| %d %s\n", timestamp() - data->t_start, \
+				id + 1, str);
+	pthread_mutex_unlock(&(data->message));
 }
 
 long long	timestamp(void)

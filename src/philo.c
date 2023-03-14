@@ -6,20 +6,20 @@
 /*   By: jeolim <jeolim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 11:02:20 by jeolim            #+#    #+#             */
-/*   Updated: 2023/03/12 19:49:06 by jeolim           ###   ########.fr       */
+/*   Updated: 2023/03/14 13:15:56 by jeolim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	take_fork(t_philo *philo)
+int	take_fork(t_data *data, t_philo *philo)
 {
 	pthread_mutex_lock(&philo->data->fork[philo->left_fork]);
-	pirnt_message(philo, "has taken the left fork 🍴");
+	pirnt_message(data, "has taken the left fork 🍴", philo->id);
 	pthread_mutex_lock(&philo->data->fork[philo->right_fork]);
-	pirnt_message(philo, "has taken the right fork 🍴🍴");
+	pirnt_message(data, "has taken the right fork 🍴🍴", philo->id);
 	pthread_mutex_lock(&philo->data->mutex_eating);
-	pirnt_message(philo, "is eating 🍝");
+	pirnt_message(data, "is eating 🍝", philo->id);
 	philo->last_eat = timestamp();
 	pthread_mutex_unlock(&philo->data->mutex_eating);
 	philo->count++;
@@ -40,11 +40,11 @@ void	*routine(void *philo)
 		usleep(10000);
 	while (!(c_philo->data->finish))
 	{
-		if (take_fork(c_philo))
+		if (take_fork(c_philo->data, c_philo))
 			break ;
-		pirnt_message(c_philo, "is sleeping 💤");
+		pirnt_message(c_philo->data, "is sleeping 💤", c_philo->id);
 		sleeping_time(c_philo->data);
-		pirnt_message(c_philo, "is thinking 🤔");
+		pirnt_message(c_philo->data, "is thinking 🤔", c_philo->id);
 	}
 	return (NULL);
 }
@@ -71,9 +71,9 @@ void	check_death(t_data *data, t_philo *philo)
 		while ((i < data->n_philo) && (!(data->finish)))
 		{
 			pthread_mutex_lock(&(data->mutex_eating));
-			if ((timestamp() - philo[i].last_eat) > philo->data->time_to_die)
+			if ((timestamp() - philo[i].last_eat) >= philo->data->time_to_die)
 			{
-				pirnt_message(philo, "died ☠️");
+				pirnt_message(data, "died ☠️", i);
 				data->finish = 1;
 			}
 			pthread_mutex_unlock(&(philo->data->mutex_eating));
