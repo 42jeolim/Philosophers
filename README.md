@@ -12,7 +12,7 @@ n명의 철학자가 원탁에 앉아 있고, 식탁 가운데에는 스파게�
 4. 일정 시간 잠을 잔다
 5. 생각을 하다 배가 고프면 2번으로 돌아간다
 
-<img width="650" height="650" alt="Screen Shot 2023-02-12 at 1 08 17 PM" src="https://blog.kakaocdn.net/dn/brOLwF/btqEsfL9yJh/3FB10NuLISW2AtyIIxcnL0/img.png">
+<img width="800" height="650" alt="Screen Shot 2023-02-12 at 1 08 17 PM" src="https://blog.kakaocdn.net/dn/brOLwF/btqEsfL9yJh/3FB10NuLISW2AtyIIxcnL0/img.png">
 
 https://blog.kakaocdn.net/dn/brOLwF/btqEsfL9yJh/3FB10NuLISW2AtyIIxcnL0/img.png
 
